@@ -37,16 +37,17 @@ model = deepspeed.init_inference(
 f = open("/home/ubuntu/test-deepspeed/prompts.txt", "r")
 lines = [line for line in f.readlines() if len(line) > 2 ]
 
-prompt = lines[0].strip()
+prompt = max(lines, key=len).strip()
 print("Prompt:", prompt)
+print("Prompt length:", len(prompt))
 inputs = tokenizer(prompt, return_tensors="pt").to(f"cuda:{local_rank}")
 with torch.no_grad():
     start_time = time.time()
     outputs = model.generate(**inputs, max_new_tokens=20)
 
     text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    end_time = time.time()
     if dist.get_rank() == 0:
         print("##########\n\n")
         print("Generated:", text)
         print("Time taken:", end_time - start_time)
-    end_time = time.time()
