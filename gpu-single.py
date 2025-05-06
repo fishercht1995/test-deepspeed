@@ -34,7 +34,7 @@ model = deepspeed.init_inference(
     replace_with_kernel_inject=True  # kernel inject not supported for all models
 )
 
-f = open("~/prompts.txt", "r")
+f = open("/home/ubuntu/test-deepspeed/prompts.txt", "r")
 lines = [line for line in f.readlines() if len(line) > 2 ]
 
 for line in lines:
