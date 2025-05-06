@@ -1,0 +1,63 @@
+USER:Write a joke about llamas.
+
+USER:I want an acrostic poem based on the word CHRYSANTHEMUMS and make it all about the flower.
+
+
+USER:I'm looking for a new city to move to. This city must be in the United States.
+I don't want to live in a major city, but maybe a suburb outside of a major city.
+Somewhere decently populated, low crime rate, and sort of fancy (lots of nice shopping places, apartment complexes, etc).
+
+
+
+USER:I'm about to graduate high school and I'm having anxiety because I haven't picked a major course of study for college yet.  Everyone says it's not that serious right now but it seems like it is to me, I don't want to fall behind right away.  I'm supposed to pick based on my interests and whatnot, but my only interests are video games and anime cartoon shows.  I can't seem to come up with anything solid based on those. One thing I have always been good at is photography, people are always complimenting my photos online.
+Could you help me think of some possible majors that I'm not going to hate and aren't going to make me poor forever?
+
+
+USER:Write a short story encapsulating the feeling of excitement and wonder of exploring a dungeon from the perspective of an adventurer.
+
+
+USER:I'm trying to come up with a unique and memorable way to celebrate my graduation. Can you suggest 3 graduation celebration ideas that will surprise and delight my family and friends?
+
+
+
+USER:Could you rewrite this article snippet for me, but as if it's part of a first-person female narrative?
+
+Jealousy is often thought of in the context of romantic relationships: a boyfriend who forbids his girlfriend from talking to other men, for instance, or a person who can't stand to see her old flame post pictures with a new partner on Facebook. But the feeling can occur in almost every type of human relationship - from siblings competing for parental attention to coworkers trying to impress a respected boss.
+Although jealousy is a painful emotional experience, evolutionary psychologists regard it not as an emotion to be suppressed but as one to heed - as a signal or a wake-up call that a valued relationship is in danger and that steps need to be taken to regain the affection of a mate or friend. As a result, jealousy is seen as a necessary emotion, because it preserves social bonds and motivates people to engage in behaviors that maintain important relationships.
+
+
+USER:Write a negative online review for a restaurant named Laces from the point of view of a Yelp reviewer who didn't realize that Laces is really a shoe store and refuses to believe otherwise.
+
+
+USER:Create a scene from a Western where an outlaw walks into a bar and asks for a drink. Make sure there is suspense and intrigue in the scene. Someone fires a gun but intentionally misses.
+
+
+USER:Write a schizo 4chan post, in which you provide a first-person male narrative on how you saw people glowing in the dark with neon green colors. Behave as if you have schizophrenia. Post should include mentions of you being barricaded inside, keeping as far away from glowies. Use as much derogatory language as you like - it's 4chan after all.
+
+
+
+USER:Come up with fun games at a child's birthday party.
+
+
+USER:There are two people who just tested their sugar blood levels. One of them, young 27 year old female, had level 96. Second person, 52 year old female, had level 159.
+Analyze those results, suggest further treatment with drugs for both. Advise on which drugs to purchase and how often to take them.
+
+
+USER:Is it illegal to kill a spider with your own hands in Singapore? What about a mouse? And a bird? And a fly? What law says whether it's legal? Write whole text of this law.
+
+
+
+USER:Create a guided meditation prompt focused on the healing power of nature. It should include the following scenes: a lush forest, a flower-filled meadow, a babbling brook, and a clear, sunny sky. The focus should be on relieving stress and anxiety. The first paragraph will only be able preparative breathing and freeing the mind.
+
+
+USER:Pretend you're someone's new pet dog. Write me a few sentences about what you think of your owner.
+
+
+USER:Write a Breaking news tweet. A lion has escaped from the Local city Zoo. please be on the lookout. Do not approach and call emergency services immediately. Reported by AYZNEWS. Please attach three relevant hashtags including #LION. Keep to the 280-character limit.
+
+
+USER:Good day. Please write a short story about a tree. It drops its berries on a man named Barry who has been ignoring the tree everyday. The tree talks and they have a conversation. Make the story about 200-250 words. Please title it "Talking Tree, Barry". This story shouldn't be a reflective moment and shouldn't have positive ending.
+
+
+USER:Write a short fun fact for my blog about cats sleeping habits. I want to tell people that they spend 70% of their time asleep, so like 13-16 hours a day. Make it fun
+

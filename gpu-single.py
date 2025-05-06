@@ -5,6 +5,7 @@ import torch
 import torch.distributed as dist
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import deepspeed
+import time
 
 # ---------- Step 1: Initialize distributed ----------
 def init_distributed():
@@ -33,12 +34,20 @@ model = deepspeed.init_inference(
     replace_with_kernel_inject=True  # kernel inject not supported for all models
 )
 
-# ---------- Step 4: Inference ----------
-prompt = "DeepSpeed is"
-inputs = tokenizer(prompt, return_tensors="pt").to(f"cuda:{local_rank}")
-with torch.no_grad():
-    outputs = model.generate(**inputs, max_new_tokens=20)
-    text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    if dist.get_rank() == 0:
-        print("##########\n\n")
-        print("Generated:", text)
+f = open("~/prompt.txt", "r")
+lines = [line for line in f.readlines() if len(line) > 2 ]
+
+for line in lines:
+    prompt = line.strip()
+    print("Prompt:", prompt)
+    inputs = tokenizer(prompt, return_tensors="pt").to(f"cuda:{local_rank}")
+    with torch.no_grad():
+        start_time = time.time()
+        outputs = model.generate(**inputs, max_new_tokens=20)
+
+        text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        if dist.get_rank() == 0:
+            print("##########\n\n")
+            print("Generated:", text)
+            print("Time taken:", end_time - start_time)
+        end_time = time.time()
