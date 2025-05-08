@@ -54,3 +54,6 @@ iperf3 -c 100.26.146.47 -t 10 --verbose
 sudo apt install traceroute
 traceroute 100.26.146
 history
+
+sudo tc qdisc add dev ens5 root netem delay 50ms
+sudo tc qdisc del dev ens5 root
