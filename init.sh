@@ -14,3 +14,4 @@ ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 sudo apt install pdsh -y
 pip install ninja
+cp cpp_extension.py /home/ubuntu/miniconda3/envs/deepspeed-inference/lib/python3.10/site-packages/torch/utils/
