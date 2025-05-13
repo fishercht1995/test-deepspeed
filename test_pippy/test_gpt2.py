@@ -40,7 +40,7 @@ stage = pipe.build_stage(rank, device=device)
 
 import sys
 
-num_mbs = int(sys.argv[1])
+num_mbs = 2
 # Run time inputs
 full_batch_prompts = (
     "How do you", "I like to", "Can I help", "You need to",
