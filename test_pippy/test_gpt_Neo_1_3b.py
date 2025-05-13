@@ -4,6 +4,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from torch.distributed.pipelining import SplitPoint, pipeline, ScheduleGPipe
 import torch.distributed as dist
 model_name = "EleutherAI/gpt-neo-1.3B"
+print("Loading model:", model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name)
 tokenizer.pad_token = tokenizer.eos_token
