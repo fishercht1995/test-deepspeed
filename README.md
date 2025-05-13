@@ -46,6 +46,10 @@ source ~/.bashrc
 conda activate deepspeed-inference
 pip install ninja
 
+git clone https://github.com/pytorch/PiPPy.git
+cd Pippy
+pip install -r requirements.txt --find-links https://download.pytorch.org/whl/nightly/cpu/torch_nightly.html
+
 
 sudo apt update
 sudo apt install iperf3 -y
@@ -59,3 +63,9 @@ sudo tc qdisc add dev ens5 root netem delay 50ms
 sudo tc qdisc del dev ens5 root
 
 ttft = {"VA (0.2ms)": 1.57, "Ohio (9ms)": 3.18, "Oregon (58ms)": 12.21, "Singapore (220ms)": 42.79}
+export PDSH_RCMD_TYPE=ssh
+pdsh -R ssh -w 18.232.54.0,98.80.150.148 "echo hello"
+
+for host in 18.232.54.0 98.80.150.148; do
+    ssh -o StrictHostKeyChecking=no ubuntu@$host "echo ok"
+done

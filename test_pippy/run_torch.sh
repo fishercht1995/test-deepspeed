@@ -10,6 +10,6 @@ torchrun \
   --nproc-per-node=1 \
   --nnodes=2 \
   --node-rank=${NODE_RANK} \
-  --master-addr=98.80.147.181 \
+  --master-addr=18.232.54.0 \
   --master-port=29500 \
   ${SCRIPT}

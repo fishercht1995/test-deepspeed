@@ -3,7 +3,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from torch.distributed.pipelining import SplitPoint, pipeline, ScheduleGPipe
 import torch.distributed as dist
-model_name = "EleutherAI/gpt-neo-2_7B"
+model_name = "EleutherAI/gpt-neo-2.7B"
 print("Loading model:", model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name)
