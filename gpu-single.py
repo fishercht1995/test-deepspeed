@@ -60,7 +60,7 @@ with torch.no_grad():
 
     # 初始化
     generated = input_ids
-    max_new_tokens = 40
+    max_new_tokens = 80
 
     timings = []
 

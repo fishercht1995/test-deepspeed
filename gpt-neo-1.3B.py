@@ -59,7 +59,7 @@ with torch.no_grad():
     attention_mask = inputs["attention_mask"].to(dtype=torch.float)
 
     generated = input_ids
-    max_new_tokens = 40
+    max_new_tokens = 80
     timings = []
 
     for i in range(max_new_tokens):
