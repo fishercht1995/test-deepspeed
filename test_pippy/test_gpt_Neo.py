@@ -66,7 +66,7 @@ schedule = ScheduleGPipe(stage, num_mbs)
 
 # Initial prompt input_ids
 input_ids = inputs["input_ids"]
-max_new_tokens = 20
+max_new_tokens = 40
 
 generated = input_ids.clone()
 import time
