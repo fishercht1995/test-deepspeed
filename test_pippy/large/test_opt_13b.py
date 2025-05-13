@@ -3,10 +3,11 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from torch.distributed.pipelining import SplitPoint, pipeline, ScheduleGPipe
 import torch.distributed as dist
-model_name = "EleutherAI/gpt-neo-125M"
+#model_name = "EleutherAI/gpt-neo-125M"
+model_name = "facebook/opt-13B"
 print("Loading model:", model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name,trust_remote_code=True)
 tokenizer.pad_token = tokenizer.eos_token
 mb_prompts = (
     "How do you", "I like to",
@@ -20,12 +21,11 @@ torch.distributed.init_process_group(rank=rank, world_size=world_size)
 model.to(device).eval()
 
 # Cut model by equal number of layers per rank
-layers_per_rank = model.transformer.config.num_layers // world_size
+layers_per_rank = model.config.num_hidden_layers // world_size
 split_spec = {
-    f"transformer.h.{i * layers_per_rank}": SplitPoint.BEGINNING
+    f"model.decoder.layers.{i * layers_per_rank}": SplitPoint.BEGINNING
     for i in range(1, world_size)
 }
-
 # Create a pipeline representation from the model
 mb_inputs = tokenizer(mb_prompts, return_tensors="pt", padding=True).to(device)
 pipe = pipeline(
@@ -39,6 +39,7 @@ pipe = pipeline(
 stage = pipe.build_stage(rank, device=device)
 
 import sys
+
 num_mbs = 2
 # Run time inputs
 full_batch_prompts = (
@@ -50,18 +51,6 @@ inputs = tokenizer(full_batch_prompts, return_tensors="pt", padding=True).to(dev
 # Attach to a schedule
 # number of microbatches = 8 // 2 = 4
 num_mbs = num_mbs
-schedule = ScheduleGPipe(stage, num_mbs)
-
-# Run time inputs
-full_batch_prompts = (
-    "How do you", "I like to", "Can I help", "You need to",
-    "The weather is", "I found a", "What is your", "You are so",
-)[:8]
-inputs = tokenizer(full_batch_prompts, return_tensors="pt", padding=True).to(device)
-
-# Attach to a schedule
-# number of microbatches = 8 // 2 = 4
-num_mbs = 4
 schedule = ScheduleGPipe(stage, num_mbs)
 
 # Initial prompt input_ids
