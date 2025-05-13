@@ -6,7 +6,7 @@ import torch.distributed as dist
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import deepspeed
 import time
-
+st = time.time()
 # ---------- Step 1: Initialize distributed ----------
 def init_distributed():
     if dist.is_initialized():
@@ -53,24 +53,25 @@ with torch.no_grad():
         print("Generated:", text)
         print("Time taken:", end_time - start_time)
 """
+et = time.time()
 with torch.no_grad():
     input_ids = inputs["input_ids"]
-    attention_mask = inputs["attention_mask"]
+    attention_mask = inputs["attention_mask"].to(dtype=torch.float)
 
-    # 初始化
     generated = input_ids
     max_new_tokens = 20
-
     timings = []
 
     for i in range(max_new_tokens):
         start = time.time()
 
         outputs = model(input_ids=generated, attention_mask=attention_mask)
-        next_token_logits = outputs.logits[:, -1, :]  # shape: (batch, vocab)
-
-        next_token = torch.argmax(next_token_logits, dim=-1, keepdim=True)  # greedy
+        next_token_logits = outputs.logits[:, -1, :]
+        next_token = torch.argmax(next_token_logits, dim=-1, keepdim=True)
         generated = torch.cat((generated, next_token), dim=1)
+
+        # update attention mask to match new generated sequence
+        attention_mask = torch.ones_like(generated, dtype=torch.float)
 
         end = time.time()
         timings.append(end - start)
@@ -80,6 +81,7 @@ with torch.no_grad():
     if dist.get_rank() == 0:
         print("##########\n\n")
         print("Generated:", decoded)
+        print(f"BEFORE = {et-st:.4f} s")
         print(f"TTFT = {timings[0]:.4f} s")
         if len(timings) > 1:
             print(f"TBT  = {sum(timings[1:]) / (len(timings)-1):.4f} s")

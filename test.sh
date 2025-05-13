@@ -1,0 +1,2 @@
+deepspeed --num_gpus 1 --num_nodes 2 --hostfile hosts.txt --master_addr 44.220.47.79 --master_port 29500 gpu-single.py >> ../test-gpt2
+deepspeed --num_gpus 1 --num_nodes 2 --hostfile hosts.txt --master_addr 44.220.47.79 --master_port 29500 gpt-neo-1.3B.py >> ../test-gpt-neo 
