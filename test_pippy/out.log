@@ -1,0 +1,45 @@
+W0513 12:59:46.286000 395757 torch/distributed/run.py:766] 
+W0513 12:59:46.286000 395757 torch/distributed/run.py:766] *****************************************
+W0513 12:59:46.286000 395757 torch/distributed/run.py:766] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0513 12:59:46.286000 395757 torch/distributed/run.py:766] *****************************************
+/home/yuqi/pippy_venv/bin/python3: can't open file '/home/yuqi/egress_proj/test-deepspeed/test_pippy/pippy_gpt2_generate.py': [Errno 2] No such file or directory
+/home/yuqi/pippy_venv/bin/python3: can't open file '/home/yuqi/egress_proj/test-deepspeed/test_pippy/pippy_gpt2_generate.py': [Errno 2] No such file or directory
+E0513 12:59:46.391000 395757 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 2) local_rank: 0 (pid: 395836) of binary: /home/yuqi/pippy_venv/bin/python3
+Traceback (most recent call last):
+  File "/home/yuqi/pippy_venv/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/yuqi/pippy_venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/yuqi/pippy_venv/lib/python3.12/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+  File "/home/yuqi/pippy_venv/lib/python3.12/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+  File "/home/yuqi/pippy_venv/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yuqi/pippy_venv/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+pippy_gpt2_generate.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2025-05-13_12:59:46
+  host      : sfo1
+  rank      : 1 (local_rank: 1)
+  exitcode  : 2 (pid: 395837)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-05-13_12:59:46
+  host      : sfo1
+  rank      : 0 (local_rank: 0)
+  exitcode  : 2 (pid: 395836)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

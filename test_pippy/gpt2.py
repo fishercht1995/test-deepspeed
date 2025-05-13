@@ -11,9 +11,21 @@ import torch.distributed as dist
 from torch.distributed.pipelining import pipeline, ScheduleGPipe, SplitPoint
 
 from transformers import GPT2ForSequenceClassification, GPT2Config
-
+from transformers import GPT2LMHeadModel, GPT2Tokenizer, GPT2Config
 from hf_utils import generate_inputs_for_model, get_number_of_params
 
+def generate_inputs_for_model(model_class, model, model_name, batch_size, device):
+    from transformers import GPT2Tokenizer
+    tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+    tokenizer.pad_token = tokenizer.eos_token
+    prompts = [
+        "The future of AI is",
+        "Once upon a time,",
+        "In a world full of data,",
+        "The robot said,"
+    ] * (batch_size // 4)
+    inputs = tokenizer(prompts[:batch_size], return_tensors="pt", padding=True)
+    return {k: v.to(device) for k, v in inputs.items()}
 
 def run(args):
     # Model configs
@@ -24,8 +36,12 @@ def run(args):
     print("[Rank {}] Using device: {}".format(args.rank, args.device))
 
     # Create model
-    model_class = GPT2ForSequenceClassification
-    model_name = "GPT2ForSequenceClassification"
+    #model_class = GPT2ForSequenceClassification
+    #model_name = "GPT2ForSequenceClassification"
+    model_class = GPT2LMHeadModel
+    model_name = "gpt2"
+    tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+    tokenizer.pad_token = tokenizer.eos_token
     gpt2 = model_class(config)
     gpt2.to(args.device)
     gpt2.eval()
@@ -58,6 +74,19 @@ def run(args):
     smod = pipe.get_stage_module(args.rank)
     print(f"Pipeline stage {args.rank} {get_number_of_params(smod) // 10 ** 6}M params")
 
+    # ✅ 插入输出中间张量大小（MB）的 Hook
+    def print_output_size_hook(module, input, output):
+        if isinstance(output, torch.Tensor):
+            size_MB = output.element_size() * output.nelement() / 1e6
+            print(f"[Rank {args.rank}] Output tensor size: {output.shape}, {size_MB:.2f} MB")
+        elif isinstance(output, (tuple, list)):
+            total_size = sum(o.element_size() * o.nelement() for o in output if isinstance(o, torch.Tensor))
+            print(f"[Rank {args.rank}] Output tuple size: {total_size / 1e6:.2f} MB")
+        elif isinstance(output, dict):
+            total_size = sum(o.element_size() * o.nelement() for o in output.values() if isinstance(o, torch.Tensor))
+            print(f"[Rank {args.rank}] Output dict size: {total_size / 1e6:.2f} MB")
+
+    smod.register_forward_hook(print_output_size_hook)
     # Create schedule runtime
     stage = pipe.build_stage(
         args.rank,
@@ -68,9 +97,9 @@ def run(args):
     schedule = ScheduleGPipe(stage, args.chunks)
 
     # Full batch inputs as in single-worker case
-    inputs = generate_inputs_for_model(
-        model_class, gpt2, model_name, args.batch_size, args.device)
-
+    #inputs = generate_inputs_for_model(
+    #    model_class, gpt2, model_name, args.batch_size, args.device)
+    inputs = generate_inputs_for_model(model_class, gpt2, model_name, args.batch_size, args.device)
     """
     # Run
     if args.rank == 0:
@@ -100,8 +129,19 @@ def run(args):
         print(f"Total batches: {len(timings)}, Total time: {sum(timings):.4f} s")
     else:
         for _ in range(args.batches):
-            schedule.step()  # No kwargs passed to non-rank0
-    
+            output = schedule.step()
+            logits = None
+            if isinstance(output, tuple) and isinstance(output[0], torch.Tensor):
+                logits = output[0]
+            elif isinstance(output, torch.Tensor):
+                logits = output
+
+            if logits is not None and logits.dim() == 3:  # [B, S, V]
+                token_ids = logits.argmax(dim=-1)  # [B, S]
+                for i in range(token_ids.size(0)):
+                    tokens = token_ids[i].tolist()
+                    text = tokenizer.decode(tokens, skip_special_tokens=True)
+                    print(f"[Rank {args.rank}] Sample {i}: {text}")
     dist.barrier()
     dist.destroy_process_group()
     print(f"Rank {args.rank} completes")

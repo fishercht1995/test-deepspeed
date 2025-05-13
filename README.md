@@ -57,3 +57,5 @@ history
 
 sudo tc qdisc add dev ens5 root netem delay 50ms
 sudo tc qdisc del dev ens5 root
+
+ttft = {"VA (0.2ms)": 1.57, "Ohio (9ms)": 3.18, "Oregon (58ms)": 12.21, "Singapore (220ms)": 42.79}

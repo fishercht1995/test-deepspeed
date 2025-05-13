@@ -54,6 +54,18 @@ def run(args):
     smod = pipe.get_stage_module(args.rank)
     print(f"Pipeline stage {args.rank} {get_number_of_params(smod) // 10 ** 6}M params")
 
+    def print_output_size_hook(module, input, output):
+        if isinstance(output, torch.Tensor):
+            size_MB = output.element_size() * output.nelement() / 1e6
+            print(f"[Rank {args.rank}] Output tensor size: {output.shape}, {size_MB:.2f} MB")
+        elif isinstance(output, (tuple, list)):
+            total_size = sum(o.element_size() * o.nelement() for o in output if isinstance(o, torch.Tensor))
+            print(f"[Rank {args.rank}] Output tuple size: {total_size / 1e6:.2f} MB")
+        elif isinstance(output, dict):
+            total_size = sum(o.element_size() * o.nelement() for o in output.values() if isinstance(o, torch.Tensor))
+            print(f"[Rank {args.rank}] Output dict size: {total_size / 1e6:.2f} MB")
+
+    smod.register_forward_hook(print_output_size_hook)
     # Create schedule runtime
     stage = pipe.build_stage(
         args.rank,
