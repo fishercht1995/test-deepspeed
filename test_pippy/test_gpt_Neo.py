@@ -27,7 +27,7 @@ split_spec = {
 }
 
 import sys
-
+stage = pipe.build_stage(rank, device=device)
 num_mbs = 2
 # Run time inputs
 full_batch_prompts = (
